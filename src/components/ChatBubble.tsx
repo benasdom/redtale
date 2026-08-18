@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { ThemedText } from "./ThemedText";
-import { RedtailAvatar } from "./RedtailMark";
+import { RedtaleAvatar } from "./RedtaleMark";
 import { ProductOfferCard } from "./ProductOfferCard";
 import { colors } from "@src/theme/colors";
 import { radius, space } from "@src/theme/typography";
@@ -19,7 +19,7 @@ export function ChatBubble({ message, onSelectOffer }: Props) {
   if (message.kind === "typing") {
     return (
       <View style={[styles.row, { justifyContent: "flex-start" }]}>
-        <RedtailAvatar size={30} />
+        <RedtaleAvatar size={30} />
         <View style={[styles.bubble, styles.agentBubble, { marginLeft: space.xs }]}>
           <ThemedText color={colors.textFaint}>Typing…</ThemedText>
         </View>
@@ -29,7 +29,7 @@ export function ChatBubble({ message, onSelectOffer }: Props) {
 
   return (
     <View style={[styles.row, { justifyContent: isUser ? "flex-end" : "flex-start" }]}>
-      {!isUser && <RedtailAvatar size={30} />}
+      {!isUser && <RedtaleAvatar size={30} />}
       <View style={{ maxWidth: "82%", marginLeft: isUser ? 0 : space.xs, marginRight: isUser ? 0 : 0 }}>
         {message.text && (
           <View style={[styles.bubble, isUser ? styles.userBubble : styles.agentBubble]}>

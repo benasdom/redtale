@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@src/components/ThemedText";
 import { PrimaryButton } from "@src/components/PrimaryButton";
-import { RedtailMark } from "@src/components/RedtailMark";
+import { RedtaleMark } from "@src/components/RedtaleMark";
 import { colors } from "@src/theme/colors";
 import { space } from "@src/theme/typography";
 import { useAppDispatch, useAppSelector } from "@src/store/hooks";
@@ -20,10 +20,10 @@ export default function SignIn() {
       <View style={styles.content}>
         <View style={styles.brandBlock}>
           <View style={styles.markCircle}>
-            <RedtailMark size={40} />
+            <RedtaleMark size={40} />
           </View>
           <ThemedText variant="displayLg" style={{ marginTop: space.md }}>
-            Redtail
+            Redtale
           </ThemedText>
           <ThemedText variant="body" color={colors.textSecondary} center style={{ marginTop: space.xs, maxWidth: 280 }}>
             Tell your agent what you want. It finds it, prices it, and gets it to your door.
@@ -49,7 +49,7 @@ export default function SignIn() {
             icon={<Ionicons name="logo-google" size={18} color={colors.textOnAccent} />}
           />
           <ThemedText variant="caption" color={colors.textFaint} center style={{ marginTop: space.md }}>
-            By continuing you agree to Redtail's Terms of Service and Privacy Policy.
+            By continuing you agree to Redtale's Terms of Service and Privacy Policy.
           </ThemedText>
         </View>
       </View>

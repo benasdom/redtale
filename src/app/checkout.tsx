@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet, Pressable, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Paystack, paystackProps } from "react-native-paystack-webview";
+import { Paystack, PaystackProps } from "react-native-paystack-webview";
 import { ThemedText } from "@src/components/ThemedText";
 import { Card } from "@src/components/Card";
 import { PrimaryButton } from "@src/components/PrimaryButton";
@@ -22,7 +22,7 @@ export default function CheckoutScreen() {
   const user = useAppSelector((s) => s.auth.user);
   const cart = useAppSelector((s) => s.cart);
   const addresses = useAppSelector((s) => s.address.items);
-  const paystackRef = useRef<paystackProps.PayStackRef>(null);
+  const paystackRef = useRef<PaystackProps.PayStackRef>(null);
 
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [placing, setPlacing] = useState(false);
@@ -57,7 +57,7 @@ export default function CheckoutScreen() {
       Alert.alert("Add a shipping address", "You'll need a shipping address before checking out.");
       return;
     }
-    const init = await paymentService.initializeTransaction(user?.email ?? "guest@redtail.app", total);
+    const init = await paymentService.initializeTransaction(user?.email ?? "guest@redtale.app", total);
     setReference(init.reference);
     // Slight delay to ensure state is set before the webview reads it.
     requestAnimationFrame(() => paystackRef.current?.startTransaction());
@@ -82,7 +82,7 @@ export default function CheckoutScreen() {
       }
       dispatch(clearCart());
       dispatch(setBuyNowOffer(null));
-      Alert.alert("Order placed", "Your Redtail agent is now reviewing and will place your order shortly.", [
+      Alert.alert("Order placed", "Your Redtale agent is now reviewing and will place your order shortly.", [
         { text: "View orders", onPress: () => router.replace("/(tabs)/orders") },
       ]);
     } finally {
@@ -169,7 +169,7 @@ export default function CheckoutScreen() {
         </Card>
 
         <ThemedText variant="caption" color={colors.textFaint} style={{ marginTop: space.md }}>
-          A human Redtail agent places this order for you once payment is confirmed - the AI never
+          A human Redtale agent places this order for you once payment is confirmed - the AI never
           submits payment or checkout on your behalf.
         </ThemedText>
       </ScrollView>

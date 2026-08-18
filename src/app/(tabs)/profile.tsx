@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@src/components/ThemedText";
 import { Card } from "@src/components/Card";
-import { RedtailAvatar } from "@src/components/RedtailMark";
+import { RedtailAvatar } from "@/src/components/RedtaleMark";
 import { colors } from "@src/theme/colors";
 import { space } from "@src/theme/typography";
 import { useAppDispatch, useAppSelector } from "@src/store/hooks";

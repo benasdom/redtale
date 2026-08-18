@@ -31,7 +31,7 @@ export function ChatComposer({ onSend, disabled, placeholder }: Props) {
         multiline
         editable={!disabled}
         onSubmitEditing={handleSend}
-        accessibilityLabel="Message your Redtail agent"
+        accessibilityLabel="Message your Redtale agent"
       />
       <Pressable
         onPress={handleSend}

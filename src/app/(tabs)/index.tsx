@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { ThemedText } from "@src/components/ThemedText";
 import { ChatBubble } from "@src/components/ChatBubble";
 import { ChatComposer } from "@src/components/ChatComposer";
-import { RedtailAvatar } from "@src/components/RedtailMark";
+import { RedtailAvatar } from "@/src/components/RedtaleMark";
 import { colors } from "@src/theme/colors";
 import { space } from "@src/theme/typography";
 import { useAppDispatch, useAppSelector } from "@src/store/hooks";
