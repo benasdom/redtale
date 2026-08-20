@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { ThemedText } from "@src/components/ThemedText";
 import { ChatBubble } from "@src/components/ChatBubble";
 import { ChatComposer } from "@src/components/ChatComposer";
-import { RedtailAvatar } from "@/src/components/RedtaleMark";
+import { RedtaleAvatar } from "@src/components/RedtaleMark";
 import { colors } from "@src/theme/colors";
 import { space } from "@src/theme/typography";
 import { useAppDispatch, useAppSelector } from "@src/store/hooks";
@@ -45,7 +45,7 @@ export default function AgentChatScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <View style={styles.header}>
-        <RedtailAvatar size={34} />
+        <RedtaleAvatar size={34} />
         <View style={{ marginLeft: space.sm }}>
           <ThemedText variant="title">Your Redtail agent</ThemedText>
           <View style={styles.liveRow}>
