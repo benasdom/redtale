@@ -17,6 +17,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.redtale.app",
       "infoPlist": {
+            "ITSAppUsesNonExemptEncryption": false,
+
         "NSCameraUsageDescription": "Redtale uses your camera to let you show the agent a product or receipt.",
         "NSPhotoLibraryUsageDescription": "Redtale uses your photo library so you can share reference images with your shopping agent."
       }
