@@ -19,7 +19,6 @@ export default function AgentChatScreen() {
   const { messages, isAgentTyping, initialized } = useAppSelector((s) => s.chat);
   const user = useAppSelector((s) => s.auth.user);
   const listRef = useRef<FlatList>(null);
-
   useEffect(() => {
     if (!initialized && user) {
       dispatch(initializeChat(user.fullName.split(" ")[0]));

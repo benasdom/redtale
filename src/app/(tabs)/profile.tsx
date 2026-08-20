@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@src/components/ThemedText";
 import { Card } from "@src/components/Card";
-import { RedtailAvatar } from "@/src/components/RedtaleMark";
+import { RedtaleAvatar } from "@src/components/RedtaleMark";
 import { colors } from "@src/theme/colors";
 import { space } from "@src/theme/typography";
 import { useAppDispatch, useAppSelector } from "@src/store/hooks";
@@ -49,7 +49,7 @@ export default function ProfileScreen() {
         </ThemedText>
 
         <Card style={styles.profileCard}>
-          <RedtailAvatar size={56} />
+          <RedtaleAvatar size={56} />
           <View style={{ marginLeft: space.sm, flex: 1 }}>
             <ThemedText variant="title">{user?.fullName ?? "Guest"}</ThemedText>
             <ThemedText variant="caption" color={colors.textSecondary}>
