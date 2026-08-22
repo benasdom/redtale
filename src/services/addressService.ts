@@ -6,7 +6,7 @@ let addressCache: Address[] = [
   {
     id: "addr_1",
     label: "Home",
-    fullName: "Chris Domfeh",
+    fullName: "User Name",
     line1: "412 Maple Street",
     city: "Austin",
     state: "TX",

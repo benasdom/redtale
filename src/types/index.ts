@@ -77,6 +77,8 @@ export type MessageKind =
   | "action_request"
   | "typing";
 
+export type ChatMessageStatus = "pending" | "streaming" | "done" | "error" | "cancelled";
+
 export interface ChatMessage {
   id: string;
   role: MessageRole;
@@ -89,7 +91,9 @@ export interface ChatMessage {
     total: number;
   };
   createdAt: string;
-  pending?: boolean;
+  pending?: boolean; // legacy, unused going forward — kept for compatibility
+  status?: ChatMessageStatus;
+  retryText?: string; // original user text; set on a failed agent message so Retry can resend it
 }
 
 export interface ChatThread {

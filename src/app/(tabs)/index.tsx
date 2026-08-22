@@ -9,9 +9,9 @@ import { RedtaleAvatar } from "@src/components/RedtaleMark";
 import { colors } from "@src/theme/colors";
 import { space } from "@src/theme/typography";
 import { useAppDispatch, useAppSelector } from "@src/store/hooks";
-import { initializeChat, pushUserMessage, sendUserMessage } from "@src/store/slices/chatSlice";
+import { initializeChat, pushUserMessage, sendUserMessage, removeMessage } from "@src/store/slices/chatSlice";
 import { setBuyNowOffer } from "@src/store/slices/cartSlice";
-import { ProductOffer } from "@src/types";
+import { ChatMessage, ProductOffer } from "@src/types";
 
 export default function AgentChatScreen() {
   const dispatch = useAppDispatch();
@@ -19,6 +19,8 @@ export default function AgentChatScreen() {
   const { messages, isAgentTyping, initialized } = useAppSelector((s) => s.chat);
   const user = useAppSelector((s) => s.auth.user);
   const listRef = useRef<FlatList>(null);
+  const activeRequestRef = useRef<{ abort: (reason?: string) => void } | null>(null);
+
   useEffect(() => {
     if (!initialized && user) {
       dispatch(initializeChat(user.fullName.split(" ")[0]));
@@ -31,9 +33,27 @@ export default function AgentChatScreen() {
     }
   }, [messages.length, isAgentTyping]);
 
+  function dispatchSend(text: string) {
+    const promise = dispatch(sendUserMessage(text));
+    activeRequestRef.current = promise;
+    promise.finally(() => {
+      if (activeRequestRef.current === promise) activeRequestRef.current = null;
+    });
+  }
+
   function handleSend(text: string) {
     dispatch(pushUserMessage(text));
-    dispatch(sendUserMessage(text));
+    dispatchSend(text);
+  }
+
+  function handleCancel() {
+    activeRequestRef.current?.abort();
+  }
+
+  function handleRetry(message: ChatMessage) {
+    if (!message.retryText) return;
+    dispatch(removeMessage(message.id));
+    dispatchSend(message.retryText);
   }
 
   function handleSelectOffer(offer: ProductOffer) {
@@ -46,7 +66,7 @@ export default function AgentChatScreen() {
       <View style={styles.header}>
         <RedtaleAvatar size={34} />
         <View style={{ marginLeft: space.sm }}>
-          <ThemedText variant="title">Your Redtail agent</ThemedText>
+          <ThemedText variant="title">Your Redtale agent</ThemedText>
           <View style={styles.liveRow}>
             <View style={styles.liveDot} />
             <ThemedText variant="caption" color={colors.textSecondary}>
@@ -63,13 +83,15 @@ export default function AgentChatScreen() {
       >
         <FlatList
           ref={listRef}
-          data={isAgentTyping ? [...messages, { id: "typing", role: "agent", kind: "typing", createdAt: "" } as any] : messages}
+          data={messages}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ChatBubble message={item} onSelectOffer={handleSelectOffer} />}
+          renderItem={({ item }) => (
+            <ChatBubble message={item} onSelectOffer={handleSelectOffer} onRetry={handleRetry} />
+          )}
           contentContainerStyle={{ paddingVertical: space.md }}
           showsVerticalScrollIndicator={false}
         />
-        <ChatComposer onSend={handleSend} disabled={isAgentTyping} />
+        <ChatComposer onSend={handleSend} onCancel={handleCancel} disabled={isAgentTyping} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

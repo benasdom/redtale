@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { View, ScrollView, StyleSheet, Pressable, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Paystack, PaystackProps } from "react-native-paystack-webview";
+import { usePaystack } from "react-native-paystack-webview";
+import type { PaystackProps } from "react-native-paystack-webview";
 import { ThemedText } from "@src/components/ThemedText";
 import { Card } from "@src/components/Card";
 import { PrimaryButton } from "@src/components/PrimaryButton";
@@ -22,11 +23,10 @@ export default function CheckoutScreen() {
   const user = useAppSelector((s) => s.auth.user);
   const cart = useAppSelector((s) => s.cart);
   const addresses = useAppSelector((s) => s.address.items);
-  const paystackRef = useRef<PaystackProps.PayStackRef>(null);
+  const { popup } = usePaystack();
 
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [placing, setPlacing] = useState(false);
-  const [reference, setReference] = useState<string | null>(null);
 
   const checkoutItems = useMemo(() => {
     if (cart.checkoutOfferId) {
@@ -57,14 +57,32 @@ export default function CheckoutScreen() {
       Alert.alert("Add a shipping address", "You'll need a shipping address before checking out.");
       return;
     }
-    const init = await paymentService.initializeTransaction(user?.email ?? "guest@redtale.app", total);
-    setReference(init.reference);
-    // Slight delay to ensure state is set before the webview reads it.
-    requestAnimationFrame(() => paystackRef.current?.startTransaction());
+    if (!user) {
+      Alert.alert("Sign in required", "Please sign in before checking out.");
+      return;
+    }
+
+    const email = user.email ?? "guest@redtale.app";
+    const init = await paymentService.initializeTransaction(email, total);
+
+    popup.checkout({
+      email,
+      amount: total,
+      reference: init.reference,
+      onSuccess: (res: PaystackProps.PaystackTransactionResponse) => {
+        handlePaymentSuccess(res.reference ?? init.reference);
+      },
+      onCancel: () => {
+        // no-op: user backed out of the payment sheet
+      },
+      onError: () => {
+        Alert.alert("Payment failed", "Something went wrong while processing your payment.");
+      },
+    });
   }
 
-  async function handlePaymentSuccess() {
-    if (!selectedAddress || !reference) return;
+  async function handlePaymentSuccess(reference: string) {
+    if (!selectedAddress) return;
     setPlacing(true);
     try {
       // TODO(backend): server should call verifyTransaction(reference) and
@@ -177,22 +195,6 @@ export default function CheckoutScreen() {
       <View style={styles.footer}>
         <PrimaryButton label={`Pay ${formatCurrency(total)}`} onPress={beginPayment} loading={placing} />
       </View>
-
-      {/* Paystack webview: mounted invisibly until startTransaction() opens it */}
-      {reference && user && (
-        <Paystack
-          paystackKey={paymentService.PAYSTACK_PUBLIC_KEY}
-          amount={total}
-          billingEmail={user.email}
-          billingName={user.fullName}
-          currency="USD"
-          refNumber={reference}
-          activityIndicatorColor={colors.accent}
-          ref={paystackRef}
-          onCancel={() => setReference(null)}
-          onSuccess={handlePaymentSuccess}
-        />
-      )}
     </SafeAreaView>
   );
 }

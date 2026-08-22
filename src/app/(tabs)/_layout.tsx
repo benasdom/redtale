@@ -8,7 +8,6 @@ import { useAppSelector } from "@src/store/hooks";
 
 export default function TabsLayout() {
   const cartCount = useAppSelector((s) => s.cart.items.reduce((n, i) => n + i.quantity, 0));
-  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -19,9 +18,9 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: colors.background,
           borderTopColor: colors.border,
-          height: 60 + insets.bottom,
+          height: 60 + 45,
           paddingTop: 6,
-          paddingBottom: insets.bottom,
+          paddingBottom: 45,
         },
         tabBarLabelStyle: { fontSize: 11.5, fontWeight: "600" },
       }}

@@ -115,7 +115,7 @@ export function buildMockOrders(): Order[] {
       shippingAddress: {
         id: "addr_1",
         label: "Home",
-        fullName: "Chris Domfeh",
+        fullName: "Benjamin Asumadu",
         line1: "412 Maple Street",
         city: "Austin",
         state: "TX",
@@ -162,7 +162,7 @@ export function buildMockOrders(): Order[] {
       shippingAddress: {
         id: "addr_1",
         label: "Home",
-        fullName: "Chris Domfeh",
+        fullName: "Benjamin Asumadu",
         line1: "412 Maple Street",
         city: "Austin",
         state: "TX",
@@ -208,7 +208,7 @@ export function buildMockOrders(): Order[] {
       shippingAddress: {
         id: "addr_1",
         label: "Home",
-        fullName: "Chris Domfeh",
+        fullName: "Benjamin Asumadu",
         line1: "412 Maple Street",
         city: "Austin",
         state: "TX",

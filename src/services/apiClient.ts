@@ -17,9 +17,9 @@
 //   POST   /payments/paystack/verify      -> { status }
 // ---------------------------------------------------------------------------
 
-export const API_BASE_URL = process.env.API_BASE_URL || "https://api.redtail.app";
-export const USE_MOCKS = true; // flip to false once the backend above is live
-
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "https://api.redtail.app";
+export const USE_MOCKS = process.env.EXPO_PUBLIC_USE_MOCKS === "true";
+export const USE_MOCK_AUTH = process.env.EXPO_PUBLIC_USE_MOCK_AUTH !== "false"; // defaults to mocked unless explicitly turned off
 export function mockDelay<T>(value: T, ms: number = 650): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }

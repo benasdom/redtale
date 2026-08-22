@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { StatusBar } from "expo-status-bar";
 import { Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { PaystackProvider } from "react-native-paystack-webview";
 import { store } from "@src/store";
 import { useAppDispatch, useAppSelector } from "@src/store/hooks";
 import { hydrateSession } from "@src/store/slices/authSlice";
@@ -48,17 +49,23 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <Provider store={store}>
-          <StatusBar style="dark"  />
-          <AuthGate>
-            <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
-              <Stack.Screen name="(auth)" options={{ animation: "fade" }} />
-              <Stack.Screen name="(tabs)" options={{ animation: "fade" }} />
-              <Stack.Screen name="order/[id]" options={{ presentation: "card" }} />
-              <Stack.Screen name="checkout" options={{ presentation: "modal" }} />
-              <Stack.Screen name="address/index" options={{ presentation: "card" }} />
-              <Stack.Screen name="address/new" options={{ presentation: "modal" }} />
-            </Stack>
-          </AuthGate>
+          <PaystackProvider
+            publicKey={process.env.EXPO_PUBLIC_PAYSTACK_PUBLIC_KEY!}
+            currency="GHS"
+            defaultChannels={["card", "bank", "ussd", "mobile_money", "qr"]}
+          >
+            <StatusBar style="dark" />
+            <AuthGate>
+              <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
+                <Stack.Screen name="(auth)" options={{ animation: "fade" }} />
+                <Stack.Screen name="(tabs)" options={{ animation: "fade" }} />
+                <Stack.Screen name="order/[id]" options={{ presentation: "card" }} />
+                <Stack.Screen name="checkout" options={{ presentation: "modal" }} />
+                <Stack.Screen name="address/index" options={{ presentation: "card" }} />
+                <Stack.Screen name="address/new" options={{ presentation: "modal" }} />
+              </Stack>
+            </AuthGate>
+          </PaystackProvider>
         </Provider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

@@ -6,11 +6,12 @@ import { radius, space, type } from "@src/theme/typography";
 
 interface Props {
   onSend: (text: string) => void;
-  disabled?: boolean;
+  onCancel?: () => void;
+  disabled?: boolean; // true while a request is in flight
   placeholder?: string;
 }
 
-export function ChatComposer({ onSend, disabled, placeholder }: Props) {
+export function ChatComposer({ onSend, onCancel, disabled, placeholder }: Props) {
   const [text, setText] = useState("");
 
   function handleSend() {
@@ -33,18 +34,30 @@ export function ChatComposer({ onSend, disabled, placeholder }: Props) {
         onSubmitEditing={handleSend}
         accessibilityLabel="Message your Redtale agent"
       />
-      <Pressable
-        onPress={handleSend}
-        disabled={!text.trim() || disabled}
-        accessibilityRole="button"
-        accessibilityLabel="Send message"
-        style={({ pressed }) => [
-          styles.sendBtn,
-          { opacity: !text.trim() || disabled ? 0.4 : pressed ? 0.8 : 1 },
-        ]}
-      >
-        <Ionicons name="arrow-up" size={19} color={colors.textOnAccent} />
-      </Pressable>
+
+      {disabled && onCancel ? (
+        <Pressable
+          onPress={onCancel}
+          accessibilityRole="button"
+          accessibilityLabel="Stop generating"
+          style={({ pressed }) => [styles.sendBtn, styles.stopBtn, { opacity: pressed ? 0.8 : 1 }]}
+        >
+          <Ionicons name="stop" size={16} color={colors.textOnAccent} />
+        </Pressable>
+      ) : (
+        <Pressable
+          onPress={handleSend}
+          disabled={!text.trim() || disabled}
+          accessibilityRole="button"
+          accessibilityLabel="Send message"
+          style={({ pressed }) => [
+            styles.sendBtn,
+            { opacity: !text.trim() || disabled ? 0.4 : pressed ? 0.8 : 1 },
+          ]}
+        >
+          <Ionicons name="arrow-up" size={19} color={colors.textOnAccent} />
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -79,5 +92,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     alignItems: "center",
     justifyContent: "center",
+  },
+  stopBtn: {
+    backgroundColor: colors.textPrimary,
   },
 });

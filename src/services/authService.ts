@@ -1,10 +1,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as WebBrowser from "expo-web-browser";
 import { User } from "@src/types";
-import { USE_MOCKS, mockDelay } from "./apiClient";
+import { USE_MOCK_AUTH, mockDelay } from "./apiClient";
 
 // ---------------------------------------------------------------------------
 // Google sign-in via Firebase Auth.
+//
+// Auth is intentionally decoupled from the global USE_MOCKS flag (see
+// USE_MOCK_AUTH in apiClient.ts). Chat/offers can be live while auth stays
+// mocked, since real Google OAuth credentials aren't provisioned yet.
+// Flip EXPO_PUBLIC_USE_MOCK_AUTH=false once the backend's
+// /auth/google/start endpoint and Firebase config are ready.
 //
 // Wiring notes for the real integration (kept here so it's a drop-in swap):
 //   1. Add the Firebase config from .env to firebaseConfig below and call
@@ -33,8 +39,8 @@ export interface AuthResult {
 
 const MOCK_USER: User = {
   id: "user_demo_1",
-  fullName: "Chris Domfeh",
-  email: "chris.domfeh@example.com",
+  fullName: "User Name",
+  email: "testusser@example.com",
   photoUrl: undefined,
   phone: undefined,
   createdAt: new Date().toISOString(),
@@ -43,7 +49,7 @@ const MOCK_USER: User = {
 };
 
 export async function signInWithGoogle(): Promise<AuthResult> {
-  if (USE_MOCKS) {
+  if (USE_MOCK_AUTH) {
     // Simulate the browser hand-off so navigation/loading states are real,
     // without requiring live OAuth credentials during development.
     try {

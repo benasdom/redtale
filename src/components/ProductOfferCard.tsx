@@ -36,7 +36,7 @@ export function ProductOfferCard({ offer, onSelect, compact }: Props) {
       <View style={styles.retailerRow}>
         <View style={styles.retailerBadge}>
           <ThemedText variant="micro" color={colors.textSecondary}>
-            {offer.retailerLogoInitial.toUpperCase()}
+{(offer.retailerLogoInitial ?? offer.retailer?.[0] ?? "?").toUpperCase()}
           </ThemedText>
         </View>
         <ThemedText variant="caption" color={colors.textSecondary}>
