@@ -6,7 +6,7 @@
 // Real endpoints this backend is expected to expose (for reference while
 // building it):
 //   POST   /auth/google                  -> { user, token }
-//   POST   /chat/threads/:id/messages     -> agent reply (may stream)
+//   POST   /chat/threads/:id/messages     -> agent reply (single JSON object)
 //   GET    /offers?query=...              -> ProductOffer[]
 //   POST   /orders                        -> Order
 //   GET    /orders                        -> Order[]
@@ -37,10 +37,11 @@ interface RequestOptions {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: unknown;
   token?: string | null;
+  signal?: AbortSignal; // lets callers cancel an in-flight request (e.g. chat "stop" button)
 }
 
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { method = "GET", body, token } = options;
+  const { method = "GET", body, token, signal } = options;
   const res = await fetch(`${API_BASE_URL}${path}`, {
     method,
     headers: {
@@ -48,6 +49,7 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
+    signal,
   });
 
   if (!res.ok) {
